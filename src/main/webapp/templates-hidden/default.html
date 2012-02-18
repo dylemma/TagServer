@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title class="lift:Menu.title">App: </title>
+    <style class="lift:CSS.blueprint"></style>
+    <style class="lift:CSS.fancyType"></style>
+    <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>
+    <script id="json" src="/classpath/json.js" type="text/javascript"></script>
+    <script class="lift:Includes.d3"></script>
+    <style type="text/css">
+/* <![CDATA[ */
+.edit_error_class {
+  display: block;
+  color: red;
+}
+
+.tabs ul{
+	display: block;
+	clear: both;
+	margin: 0;
+	padding: 0;
+}
+
+.tabs li{
+	float: left;
+	list-style: none;
+	margin-right: 2px;
+}
+
+.tabs li a, .tabs li span {
+	padding-left: 1em;
+	padding-right: 1em;
+	border: 1px solid #DDD;
+	border-bottom: none;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	margin-bottom: 0;
+	background: #EEE;
+	text-decoration: none;
+}
+
+
+  /* ]]> */
+  </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="column span-12 last" style="text-align: right">
+        <h1 class="alt">app<img alt="" id="ajax-loader" style="display:none; margin-bottom: 0px; margin-left: 5px" src="/images/ajax-loader.gif"></h1>
+      </div>
+
+      <div class="tabs">
+		<span class="lift:Menu.builder"></span>
+      </div>
+      
+      <hr>
+      
+      <div class="lift:Msgs?showAll=true"></div>
+      
+      <div class="column span-17 last">
+        <div id="content">The main content will get bound here</div>
+      </div>
+
+      <hr />
+      <div class="column span-23 last" style="text-align: center">
+        <h4 class="alt">
+          <a href="http://www.liftweb.net"><i>Lift</i></a> 
+	  is Copyright 2007-2011 WorldWide Conferencing, LLC.
+	  Distributed under an Apache 2.0 License.</h4>
+      </div>
+    </div>
+  </body>
+</html>
