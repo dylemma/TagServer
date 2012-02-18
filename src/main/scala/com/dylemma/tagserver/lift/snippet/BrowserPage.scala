@@ -1,4 +1,4 @@
-//package code.snippet
+//package com.dylemma.tagserver.lift.snippet
 //import net.liftweb.common.Box
 //import net.liftweb.sitemap.Menu
 //import code.model.db._

@@ -1,4 +1,4 @@
-//package code.script
+//package com.dylemma.tagserver.lift.script
 //
 //import java.io.{ File => JFile }
 //import code.model.db._

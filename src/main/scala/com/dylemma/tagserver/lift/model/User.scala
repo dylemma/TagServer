@@ -1,5 +1,4 @@
-package code
-package model
+package com.dylemma.tagserver.lift.tag
 
 import net.liftweb.http._
 import net.liftweb.openid._

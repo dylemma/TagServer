@@ -1,4 +1,4 @@
-package code.snippet
+package com.dylemma.tagserver.lift.snippet
 
 import net.liftweb.util._
 
