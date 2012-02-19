@@ -9,6 +9,7 @@ import sitemap._
 import Loc._
 import mapper._
 import com.dylemma.tagserver.lift.snippet.Includes
+import com.dylemma.tagserver.orientdb.OrientDB
 
 /** A class that's instantiated early and run.  It allows the application
   * to modify lift's environment
@@ -16,6 +17,9 @@ import com.dylemma.tagserver.lift.snippet.Includes
 class Boot {
 	def boot {
 		ResourceServer.allow(Includes.resources)
+
+		OrientDB.init
+		LiftRules.unloadHooks.append(() => OrientDB.unload)
 
 		// where to search snippet
 		LiftRules.addToPackages("code")

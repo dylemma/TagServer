@@ -2,7 +2,6 @@ package com.dylemma.tagserver.orientdb
 
 import com.dylemma.tagserver.orientdb.orm._
 import com.tinkerpop.blueprints.pgm.{ Vertex, Graph }
-import com.dylemma.tagserver.model.{ MFile, MTag }
 
 class OrientFile(vertex: Vertex, graph: Graph) extends VertexProxy {
 	def this(graph: Graph) = this(graph.addVertex(), graph)
@@ -19,6 +18,10 @@ class OrientFile(vertex: Vertex, graph: Graph) extends VertexProxy {
 	private val _path = new VertexProperty[String](vertex, "filepath", "<unknown path>")
 	def path = _path()
 	def path_=(p: String) = _path() = p
+
+	private val _md5 = new VertexProperty[String](vertex, "md5hash", "00")
+	def md5 = _md5()
+	def md5_=(hash: String) = _md5() = hash
 
 	private implicit def upgradeVertex(v: Vertex) = new OrientFile(v, graph)
 

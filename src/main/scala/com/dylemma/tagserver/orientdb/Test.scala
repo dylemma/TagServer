@@ -57,6 +57,7 @@ object Test {
 		val args = argsArray.toList
 
 		withGraph("local:D:/Temp/OrientDBTest") { graph =>
+			println("Hey, the first graph: " + graph)
 			args match {
 				case List("create") =>
 					println("Clearing graph to start fresh")
@@ -67,6 +68,10 @@ object Test {
 					readTags(graph)
 				case _ => println("Usage: [create|read]")
 			}
+		}
+
+		withGraph("local:D:/Temp/OrientDBTest") { graph =>
+			println("Hey another graph: " + graph)
 		}
 
 		println("Done")
