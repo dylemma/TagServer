@@ -11,7 +11,10 @@ class OrientTag(vertex: Vertex, graph: Graph) extends VertexProxy {
 	//hard-wire the `type` to "tag"
 	vertex.setProperty("type", "tag")
 
-	val name = new VertexProperty(vertex, "tagName", "<unnamed tag>")
+	private val _name = new VertexProperty(vertex, "tagName", "<unnamed tag>")
+	def name = _name()
+	def name_=(n: String) = _name() = n
 
-	val taggedFiles = new VertexRelations(vertex, graph, "tag", outgoing = false)(v => new OrientFile(v, graph))
+	private val _taggedFiles = new VertexRelations(vertex, graph, "tag", outgoing = false)(v => new OrientFile(v, graph))
+	def taggedFiles = _taggedFiles()
 }

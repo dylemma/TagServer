@@ -2,6 +2,7 @@ package com.dylemma.tagserver.orientdb
 
 import com.dylemma.tagserver.orientdb.orm._
 import com.tinkerpop.blueprints.pgm.{ Vertex, Graph }
+import com.dylemma.tagserver.model.{ MFile, MTag }
 
 class OrientFile(vertex: Vertex, graph: Graph) extends VertexProxy {
 	def this(graph: Graph) = this(graph.addVertex(), graph)
@@ -11,16 +12,30 @@ class OrientFile(vertex: Vertex, graph: Graph) extends VertexProxy {
 	//hard-wire the `type` to "file"
 	vertex.setProperty("type", "file")
 
-	val name = new VertexProperty[String](vertex, "filename", "<unknown name>")
-	val path = new VertexProperty[String](vertex, "filepath", "<unknown path>")
+	private val _name = new VertexProperty[String](vertex, "filename", "<unknown name>")
+	def name = _name()
+	def name_=(n: String) = _name() = n
+
+	private val _path = new VertexProperty[String](vertex, "filepath", "<unknown path>")
+	def path = _path()
+	def path_=(p: String) = _path() = p
 
 	private implicit def upgradeVertex(v: Vertex) = new OrientFile(v, graph)
 
-	val parent = new VertexRelation[OrientFile](vertex, graph, "parentFile", outgoing = true)
-	val children = new VertexRelations(vertex, graph, "parentFile", outgoing = false)
+	private val _parent = new VertexRelation[OrientFile](vertex, graph, "parentFile", outgoing = true)
+	def parent = _parent()
+	def parent_=(p: OrientFile): Unit = parent = Some(p)
+	def parent_=(p: Option[OrientFile]): Unit = p match {
+		case None => _parent() = None
+		case Some(f) => _parent() = Some(f)
+	}
+
+	private val _children = new VertexRelations(vertex, graph, "parentFile", outgoing = false)
+	def children = _children()
 
 	//TODO: for the implicit argument here, it would be better if there was a central source for the
 	//implementation, as long as it means that it isn't repeated everywhere
-	val tags = new VertexRelations[OrientTag](vertex, graph, "tag", outgoing = true)(v => new OrientTag(v, graph))
+	private val _tags = new VertexRelations[OrientTag](vertex, graph, "tag", outgoing = true)(v => new OrientTag(v, graph))
+	def tags = _tags()
 }
 

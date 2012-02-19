@@ -24,17 +24,21 @@ class VertexRelation[T <: VertexProxy] // T must be a subtype of a VertexPropert
 		}
 	}
 
-	def update(newValue: T): Unit = {
+	def update(newValue: Option[T]): Unit = {
 		if (outgoing) {
 			for (edge <- vertex.getOutEdges(label)) {
 				graph.removeEdge(edge)
 			}
-			graph.addEdge(null, vertex, newValue.asVertex, label)
+			newValue.foreach { v =>
+				graph.addEdge(null, vertex, v.asVertex, label)
+			}
 		} else {
 			for (edge <- vertex.getInEdges(label)) {
 				graph.removeEdge(edge)
 			}
-			graph.addEdge(null, newValue.asVertex, vertex, label)
+			newValue.foreach { v =>
+				graph.addEdge(null, v.asVertex, vertex, label)
+			}
 		}
 	}
 }

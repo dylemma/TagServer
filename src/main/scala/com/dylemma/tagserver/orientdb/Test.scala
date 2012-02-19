@@ -8,34 +8,34 @@ object Test {
 
 	def makeExampleGraph(graph: OrientGraph): Unit = graph.withTransaction {
 		val file1 = new OrientFile(graph)
-		file1.name() = "file1.txt"
-		file1.path() = "somefolder/file1.txt"
+		file1.name = "file1.txt"
+		file1.path = "somefolder/file1.txt"
 
 		val file2 = new OrientFile(graph)
-		file2.name() = "somefolder"
-		file2.path() = "somefolder"
-		file2.children() += file1
+		file2.name = "somefolder"
+		file2.path = "somefolder"
+		file2.children += file1
 
 		//file2 will be the "root" of the "files" graph
 		graph.getRawGraph.setRoot("files", file2.asVertex.asInstanceOf[OrientVertex].getRawElement)
 
 		val file3 = new OrientFile(graph)
-		file3.name() = "file3.txt"
-		file3.path() = "somefolder/file3.txt"
-		file3.parent() = file2
+		file3.name = "file3.txt"
+		file3.path = "somefolder/file3.txt"
+		file3.parent = file2
 
 		val tag1 = new OrientTag(graph)
-		tag1.name() = "Awesome!"
+		tag1.name = "Awesome!"
 
 		val tag2 = new OrientTag(graph)
-		tag2.name() = "Cool"
+		tag2.name = "Cool"
 
 		val tag3 = new OrientTag(graph)
-		tag3.name() = "Lame"
+		tag3.name = "Lame"
 
-		file1.tags() += tag1 += tag2
+		file1.tags += tag1 += tag2
 
-		file3.tags() += tag3
+		file3.tags += tag3
 	}
 
 	def readTags(graph: OrientGraph) = {
@@ -43,9 +43,9 @@ object Test {
 		val rootFile = new OrientFile(rootVertex, graph)
 
 		def printTags(file: OrientFile, indent: String): Unit = {
-			val tags = file.tags().map(_.name()).mkString("[", ", ", "]")
-			println(indent + file.name() + " -> " + tags)
-			for (child <- file.children()) {
+			val tags = file.tags.map(_.name).mkString("[", ", ", "]")
+			println(indent + file.name + " -> " + tags)
+			for (child <- file.children) {
 				printTags(child, indent + "  ")
 			}
 		}
