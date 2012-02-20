@@ -11,15 +11,15 @@ class OrientFile(vertex: Vertex, graph: Graph) extends VertexProxy {
 	//hard-wire the `type` to "file"
 	vertex.setProperty("type", "file")
 
-	private val _name = new VertexProperty[String](vertex, "filename", "<unknown name>")
+	private[orientdb] val _name = new VertexProperty[String](vertex, "filename", "<unknown name>")
 	def name = _name()
 	def name_=(n: String) = _name() = n
 
-	private val _path = new VertexProperty[String](vertex, "filepath", "<unknown path>")
+	private[orientdb] val _path = new VertexProperty[String](vertex, "filepath", "<unknown path>")
 	def path = _path()
 	def path_=(p: String) = _path() = p
 
-	private val _md5 = new VertexProperty[String](vertex, "md5hash", "00")
+	private[orientdb] val _md5 = new VertexProperty[String](vertex, "md5hash", "00")
 	def md5 = _md5()
 	def md5_=(hash: String) = _md5() = hash
 

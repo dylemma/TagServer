@@ -1,8 +1,9 @@
 package com.dylemma.tagserver.orientdb
 
 import com.tinkerpop.blueprints.pgm.impls.orientdb.OrientGraph
-
+import orm._
 import net.liftweb.common.Loggable
+import com.orientechnologies.orient.core.record.impl.ODocument
 
 object OrientDB extends Loggable {
 
@@ -10,9 +11,11 @@ object OrientDB extends Loggable {
 
 	private var _graph: OrientGraph = null
 
-	lazy val init = {
-		logger.debug("Initializing OrientDB Graph")
-		_graph = new OrientGraph(graphURI)
+	def init = {
+		if (_graph == null) {
+			logger.debug("Initializing OrientDB Graph")
+			_graph = new OrientGraph(graphURI)
+		}
 		true
 	}
 
@@ -25,6 +28,7 @@ object OrientDB extends Loggable {
 		logger.debug("Shutting down OrientDB Graph")
 		_graph.getRawGraph.close
 		_graph.shutdown
+		_graph = null
 	}
 
 	Runtime.getRuntime.addShutdownHook(new Thread {
@@ -35,7 +39,19 @@ object OrientDB extends Loggable {
 
 object TestThing extends App {
 	println("startup")
-	OrientDB.withGraph { g => println(g) }
-	OrientDB.withGraph { g => println(g) }
+
+	OrientDB.withGraph { implicit graph =>
+
+		val allKids = for {
+			f <- OrientFiles
+			child <- f.children
+		} yield child.md5
+
+		println("kids: " + allKids)
+
+		println(for (f <- OrientFiles) yield f.name)
+	}
+
+	OrientDB.unload
 	println("shutdown")
 }

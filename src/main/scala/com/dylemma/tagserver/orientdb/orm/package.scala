@@ -3,8 +3,10 @@ package com.dylemma.tagserver.orientdb
 import com.tinkerpop.blueprints.pgm.impls.orientdb.OrientGraph
 import com.tinkerpop.blueprints.pgm.TransactionalGraph
 import TransactionalGraph.Conclusion._
-
 import net.liftweb.util.Helpers._
+import scala.collection.JavaConverters._
+import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 
 package object orm {
 	/** Obtains an OrientGraph for the given `uri`, and executes the `body`
@@ -35,6 +37,14 @@ package object orm {
 			} finally {
 				graph.stopTransaction(FAILURE)
 			}
+		}
+	}
+
+	implicit def dbWrapper(db: ODatabaseDocumentTx) = new {
+		def queryBySql[T](sql: String, params: AnyRef*): List[T] = {
+			val params4java = params.toArray
+			val results: java.util.List[T] = db.query(new OSQLSynchQuery[T](sql), params4java: _*)
+			results.asScala.toList
 		}
 	}
 

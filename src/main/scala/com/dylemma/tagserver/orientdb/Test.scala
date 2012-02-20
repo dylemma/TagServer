@@ -54,9 +54,9 @@ object Test {
 	}
 
 	def main(argsArray: Array[String]): Unit = {
-		val args = argsArray.toList
+		val args = List("read") //argsArray.toList
 
-		withGraph("local:D:/Temp/OrientDBTest") { graph =>
+		OrientDB.withGraph { graph =>
 			println("Hey, the first graph: " + graph)
 			args match {
 				case List("create") =>
