@@ -30,11 +30,6 @@ object OrientDB extends Loggable {
 		_graph.shutdown
 		_graph = null
 	}
-
-	Runtime.getRuntime.addShutdownHook(new Thread {
-		override def run: Unit = unload
-
-	})
 }
 
 object TestThing extends App {
@@ -42,14 +37,7 @@ object TestThing extends App {
 
 	OrientDB.withGraph { implicit graph =>
 
-		val allKids = for {
-			f <- OrientFiles
-			child <- f.children
-		} yield child.md5
-
-		println("kids: " + allKids)
-
-		println(for (f <- OrientFiles) yield f.name)
+		for (f <- OrientFiles) println(f)
 	}
 
 	OrientDB.unload

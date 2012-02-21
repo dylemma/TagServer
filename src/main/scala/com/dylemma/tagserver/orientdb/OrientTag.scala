@@ -7,6 +7,7 @@ class OrientTag(vertex: Vertex, graph: Graph) extends VertexProxy {
 	def this(graph: Graph) = this(graph.addVertex(), graph)
 
 	def asVertex: Vertex = vertex
+	def delete = graph.removeVertex(vertex)
 
 	//hard-wire the `type` to "tag"
 	vertex.setProperty("type", "tag")
@@ -17,4 +18,6 @@ class OrientTag(vertex: Vertex, graph: Graph) extends VertexProxy {
 
 	private val _taggedFiles = new VertexRelations(vertex, graph, "tag", outgoing = false)(v => new OrientFile(v, graph))
 	def taggedFiles = _taggedFiles()
+
+	override def toString = "OrientTag[%s (applied to %d files)]".format(name, taggedFiles.size)
 }

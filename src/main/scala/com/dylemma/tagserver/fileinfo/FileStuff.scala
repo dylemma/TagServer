@@ -1,4 +1,4 @@
-package com.dylemma.tagserver.filestuff
+package com.dylemma.tagserver.fileinfo
 
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter

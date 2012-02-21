@@ -7,6 +7,7 @@ class OrientFile(vertex: Vertex, graph: Graph) extends VertexProxy {
 	def this(graph: Graph) = this(graph.addVertex(), graph)
 
 	def asVertex: Vertex = vertex
+	def delete = graph.removeVertex(vertex)
 
 	//hard-wire the `type` to "file"
 	vertex.setProperty("type", "file")
@@ -40,5 +41,12 @@ class OrientFile(vertex: Vertex, graph: Graph) extends VertexProxy {
 	//implementation, as long as it means that it isn't repeated everywhere
 	private val _tags = new VertexRelations[OrientTag](vertex, graph, "tag", outgoing = true)(v => new OrientTag(v, graph))
 	def tags = _tags()
+
+	override def toString = "OrientFile[%s (%s) - child of %s - %d children <0x%s>]".format(
+		path,
+		name,
+		parent.map { _.name }.getOrElse("nothing"),
+		children.size,
+		md5)
 }
 
