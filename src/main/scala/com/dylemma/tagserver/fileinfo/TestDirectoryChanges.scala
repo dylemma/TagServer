@@ -4,6 +4,8 @@ import com.dylemma.tagserver.orientdb._
 import java.io.File
 import org.apache.commons.io.{ FilenameUtils, FileUtils }
 import com.tinkerpop.blueprints.pgm.impls.orientdb.OrientGraph
+import org.apache.commons.io.monitor.FileAlterationObserver
+import org.apache.commons.io.monitor.FileAlterationMonitor
 
 object TestDirectoryChanges {
 
@@ -26,6 +28,21 @@ object TestDirectoryChanges {
 				for (s <- changes) println(s)
 				val changeHandler = new DirectoryChangeHandler
 				changeHandler.handle(changes)
+
+				println("Offline changes have been handled. Switching to online mode.")
+
+				val observer = new FileAlterationObserver(test)
+				val monitor = new FileAlterationMonitor(5000, observer)
+				val listener = new FileChangeListener
+				observer.addListener(listener)
+
+				monitor.start
+
+				println("(monitor started. enter some text to stop)")
+				readLine
+				monitor.stop
+				println("Goodbye.")
+
 			}
 		} finally {
 			OrientDB.unload
