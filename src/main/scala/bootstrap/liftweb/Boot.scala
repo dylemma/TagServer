@@ -22,7 +22,7 @@ class Boot {
 		LiftRules.unloadHooks.append(() => OrientDB.unload)
 
 		// where to search snippet
-		LiftRules.addToPackages("code")
+		LiftRules.addToPackages("com.dylemma.tagserver.lift")
 
 		// Build SiteMap
 		def sitemap = SiteMap(

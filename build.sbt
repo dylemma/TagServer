@@ -17,7 +17,8 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   "org.mortbay.jetty" % "jetty" % "6.1.22" % "container",
   "ch.qos.logback" % "logback-classic" % "0.9.26" % "compile->default",
-  "org.scalatest" %% "scalatest" % "1.7.1" % "test"
+  "org.scalatest" %% "scalatest" % "1.7.1" % "test",
+  "commons-io" % "commons-io" % "2.1"
 )
 
 resolvers ++= Seq(
