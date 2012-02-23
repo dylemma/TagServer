@@ -10,9 +10,6 @@ import DBFile._
 /** Handles changes to a directory structure and persists them to the OrientDB Graph.
   */
 class DirectoryChangeHandler(implicit graph: OrientGraph) {
-	//	def dbName(file: File) = file.getName
-	//	def dbPath(file: File) = FilenameUtils.separatorsToUnix(file.getCanonicalPath)
-	//	def dbMD5(file: File) = MD5(file)
 
 	/** Given a list of changes to files (additions, deletions, modifications, and moves),
 	  * perform the necessary actions to persist the state to the database.
@@ -51,10 +48,13 @@ class DirectoryChangeHandler(implicit graph: OrientGraph) {
 				case Some(parent) => entry.parent = parent
 				case None =>
 					// check if the db has the right entry, otherwise just let it be
-					for (f <- OrientFiles if f.path is parentPath)
+					for (f <- OrientFiles if f.path is parentPath) {
 						entry.parent = f
+					}
 			}
 		}
+
+		addedEntriesByPath foreach println _
 	}
 
 	private def handleMoves(changes: List[FileChangeStatus]): Unit = {

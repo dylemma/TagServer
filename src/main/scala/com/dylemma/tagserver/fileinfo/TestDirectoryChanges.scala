@@ -9,33 +9,56 @@ import org.apache.commons.io.monitor.FileAlterationMonitor
 
 object TestDirectoryChanges {
 
+	def addNewRootDir(file: File)(implicit graph: OrientGraph) = {
+		val root = OrientFileRoot()
+		val ofile = new OrientFile(graph)
+		ofile.name = DBFile.nameFor(file)
+		ofile.path = DBFile.pathFor(file)
+		root.members += ofile
+	}
+
+	def prettyPrint(file: OrientFile, indent: String = ""): Unit = {
+		println(indent + file)
+		for (child <- file.children) {
+			prettyPrint(child, "  " + indent)
+		}
+	}
+
 	def main(args: Array[String]): Unit = {
 		val test = new File("D:/Users/Dylan/Desktop/test")
 		try {
 			OrientDB.withGraph { implicit graph =>
 				//				graph.clear
-				//				indexFile(test)
 				//
-				//				for (f <- OrientFiles) println(f)
+				//				addNewRootDir(test)
+				//				addNewRootDir(new File(test.getParentFile, "test2"))
 
-				val oRoot = OrientFiles.withFilter(_.path is DBFile.pathFor(test))
-				//			compareDirContents(test, oRoot.head)
+				val fileRoot = OrientFileRoot()
 
-				val indexer = new DirectoryChangeFinder
-				val statuses = indexer.getChanges(test, oRoot.head)
-				val changes = new FileChangeResolver().resolve(statuses)
-				println("\n=========================\n")
-				for (s <- changes) println(s)
-				val changeHandler = new DirectoryChangeHandler
-				changeHandler.handle(changes)
+				val observers = for (oRoot <- fileRoot.members) yield {
+					val rootFile = new File(oRoot.path)
+
+					val statuses = DirectoryChangeFinder.getChanges(rootFile, oRoot)
+					val changes = FileChangeResolver.resolve(statuses)
+
+					for (s <- changes) println(s)
+
+					val changeHandler = new DirectoryChangeHandler
+					changeHandler.handle(changes)
+
+					//					println("-=-=-=-=-=-")
+					//					prettyPrint(oRoot)
+					//					println("-=-=-=-=-=-")
+
+					val observer = new FileAlterationObserver(oRoot.path)
+					observer.addListener(new FileChangeListener)
+					println("[Create an observer for changes in " + oRoot + "]")
+					observer
+				}
 
 				println("Offline changes have been handled. Switching to online mode.")
 
-				val observer = new FileAlterationObserver(test)
-				val monitor = new FileAlterationMonitor(5000, observer)
-				val listener = new FileChangeListener
-				observer.addListener(listener)
-
+				val monitor = new FileAlterationMonitor(5000, observers.toList: _*)
 				monitor.start
 
 				println("(monitor started. enter some text to stop)")

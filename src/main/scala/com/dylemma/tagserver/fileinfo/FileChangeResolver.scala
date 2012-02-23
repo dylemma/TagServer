@@ -2,7 +2,20 @@ package com.dylemma.tagserver.fileinfo
 
 import scala.annotation.tailrec
 
-class FileChangeResolver {
+object FileChangeResolver {
+	/** Resolve the given list of naive `statuses` into a list of interpreted changes.
+	  * @param statuses a list of file change observations
+	  * @return a list of "smarter" file change events. For example, if a new file and
+	  * missing file that both have the same md5 hash value, the pair is interpreted as
+	  * a "moved" event.
+	  */
+	def resolve(statuses: List[FileChangeObservation]) = {
+		val resolver = new FileChangeResolver
+		resolver.resolve(statuses)
+	}
+}
+
+private class FileChangeResolver {
 
 	private var changes: List[FileChangeStatus] = Nil
 

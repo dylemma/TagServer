@@ -3,10 +3,22 @@ package com.dylemma.tagserver.fileinfo
 import java.io.File
 import com.dylemma.tagserver.orientdb.OrientFile
 
+object DirectoryChangeFinder {
+	/** Recursively compares the given `rootDir` and the `oRootDir` for structural changes.
+	  * @param rootDir the File object that can be used to get the current state of the directory
+	  * @param oRootDir the OrientDB representation of the directory, corresponding to the `rootDir`
+	  * @return a list of the observed changes
+	  */
+	def getChanges(rootDir: File, oRootDir: OrientFile): List[FileChangeObservation] = {
+		val finder = new DirectoryChangeFinder
+		finder.getChanges(rootDir, oRootDir)
+	}
+}
+
 /** An instance of this class can naively analyze the differences between the current
   * state of a directory, and the stored state of the corresponding directory in the database.
   */
-class DirectoryChangeFinder {
+private class DirectoryChangeFinder {
 
 	private var statuses: List[FileChangeObservation] = Nil
 
